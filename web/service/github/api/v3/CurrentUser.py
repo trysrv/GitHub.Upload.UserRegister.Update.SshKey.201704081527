@@ -49,7 +49,7 @@ class CurrentUser(object):
 
     def __GetTwoFactorSecret(self):
         account_id = self.__db.account['Accounts'].find_one(Username=self.Name)['Id']
-        print(account_id)
+#        print(account_id)
         two_fac = self.__db.account['TwoFactors'].find_one(AccountId=account_id)
         if None is two_fac:
             return None
@@ -66,12 +66,12 @@ class CurrentUser(object):
                 sql = sql + "(',' || Scopes || ',') LIKE '%,{0},%'".format(s) + " OR "
             sql = sql.rstrip(" OR ")
             sql = sql + ')'
-        print(scopes)
-        print(sql)
+#        print(scopes)
+#        print(sql)
         res = self.__db.account.query(sql)
         ret = None
         for r in res:
-            print(r)
+#            print(r)
             ret = r
         return ret['AccessToken']
 #        return self.__db.account.query(sql).next()['AccessToken']

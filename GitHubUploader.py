@@ -25,11 +25,11 @@ class Main:
         parser.add_argument('-d', '--description')
         parser.add_argument('-l', '--homepage', '--link', '--url')
         args = parser.parse_args()
-        print(args)
-        print('path_dir_pj: {0}'.format(args.path_dir_pj))
-        print('-u: {0}'.format(args.username))
-        print('-d: {0}'.format(args.description))
-        print('-l: {0}'.format(args.homepage))
+#        print(args)
+#        print('path_dir_pj: {0}'.format(args.path_dir_pj))
+#        print('-u: {0}'.format(args.username))
+#        print('-d: {0}'.format(args.description))
+#        print('-l: {0}'.format(args.homepage))
 
         config = configparser.ConfigParser()
         config.read(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config.ini'))
@@ -38,9 +38,9 @@ class Main:
         
         if None is args.username:
             args.username = config['GitHub']['User']
-            print('default-username: {0}'.format(args.username))
-        print(os.path.join(path_dir_db, 'GitHub.Accounts.sqlite3'))
-        print(os.path.join(path_dir_db, 'GitHub.Repositories.{0}.sqlite3'.format(args.username)))
+#            print('default-username: {0}'.format(args.username))
+#        print(os.path.join(path_dir_db, 'GitHub.Accounts.sqlite3'))
+#        print(os.path.join(path_dir_db, 'GitHub.Repositories.{0}.sqlite3'.format(args.username)))
         
         db = database.src.Database.Database()
         db.Initialize()

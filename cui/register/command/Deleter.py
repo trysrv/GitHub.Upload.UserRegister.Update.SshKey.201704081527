@@ -7,11 +7,13 @@ import cui.register.github.api.v3.authorizations.Authorizations
 import cui.register.github.api.v3.users.SshKeys
 import cui.register.github.api.v3.users.Emails
 import cui.register.SshConfigurator
-class Deleter:
+import cui.register.command.ASubCommand
+class Deleter(cui.register.command.ASubCommand):
     def __init__(self):
         self.__db = None
 
-    def Delete(self, args):
+    def Run(self, args):
+#    def Delete(self, args):
         print('Account.Delete')
         print(args)
         print('-u: {0}'.format(args.username))

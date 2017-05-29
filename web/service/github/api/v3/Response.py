@@ -8,7 +8,7 @@ import web.http.Response
 class Response(web.http.Response.Response):
     def __init__(self):
         super().__init__()
-        self.re_content_type_raw = re.compile('application/vnd.github.*.raw')
+        self.__re_content_type_raw = re.compile('application/vnd.github.*.raw')
 
     """
     HTTP応答データを返す
@@ -21,7 +21,7 @@ class Response(web.http.Response.Response):
             return None
         elif 'json' == self.Headers.ContentType.suffix:
             return r.json()
-        elif self.re_content_type_raw.match(self.Headers.ContentType.mime_type):
+        elif self.__re_content_type_raw.match(self.Headers.ContentType.mime_type):
             return r.content
         else:
             return res

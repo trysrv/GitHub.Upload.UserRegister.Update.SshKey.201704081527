@@ -58,15 +58,6 @@ class Database:
         self.dir_db = os.path.abspath(config['Path']['DB'])
         for key in self.__files.keys():
             self.__files[key] = os.path.join(self.dir_db, self.__files[key])
-        """
-        self.__files['lang'] = os.path.join(self.dir_db, self.__files['lang'])
-        self.__files['api'] = os.path.join(self.dir_db, self.__files['api'])
-        self.__files['gnu_license'] = os.path.join(self.dir_db, self.__files['gnu_license'])
-        self.__files['account'] = os.path.join(self.dir_db, self.__files['account'])
-        self.__files['license'] = os.path.join(self.dir_db, self.__files['license'])
-        self.__files['other_repo'] = os.path.join(self.dir_db, self.__files['other_repo'])
-        self.__files['repo'] = os.path.join(self.dir_db, self.__files['repo'])
-        """
         self.__OpenDb()
 
     def __OpenDb(self):
@@ -101,7 +92,6 @@ class Database:
         if 0 < self.account['Accounts'].count():
             # ライセンスDB生成（ファイル、テーブル作成。データ挿入）            
             if not(os.path.isfile(self.__files['license'])):
-                print('lllllllllllllllllllllllllllllicense Create.')
                 print(self.__files['license'])
                 user = web.service.github.api.v3.CurrentUser.CurrentUser(self, self.account['Accounts'].find().next()['Username'])
                 client = web.service.github.api.v3.Client.Client(self, user, None)

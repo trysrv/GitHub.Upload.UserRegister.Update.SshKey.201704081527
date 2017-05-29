@@ -12,12 +12,14 @@ import cui.register.github.api.v3.users.SshKeys
 import cui.register.github.api.v3.users.Emails
 import web.sqlite.Json2Sqlite
 import cui.register.SshConfigurator
-class Inserter:
+import cui.register.command.ASubCommand
+class Inserter(cui.register.command.ASubCommand):
     def __init__(self):
         self.__j2s = web.sqlite.Json2Sqlite.Json2Sqlite()
         self.__db = None
 
-    def Insert(self, args):
+    def Run(self, args):
+#    def Insert(self, args):
         print('Account.Insert')
         print(args)
         print('-u: {0}'.format(args.username))
@@ -44,7 +46,6 @@ class Inserter:
             if None is args.ssh_host:
                 # 3A-1. SSH鍵の新規作成
                 ssh_key_gen_params = self.__SshKeyGen(args.username, mailaddress)
-#                host = self.__SshConfig(args.username, ssh_key_gen_params['path_file_key_private'])
                 sshconf = cui.register.SshConfigurator.SshConfigurator()
                 sshconf.Load()
                 host = sshconf.AppendHost(args.username, ssh_key_gen_params['path_file_key_private'])
@@ -101,17 +102,6 @@ class Inserter:
         ssh_key_gen_params.update({'path_file_key_private': path_file_key_private})
         print(ssh_key_gen_params['path_file_key_private'])
         print(ssh_key_gen_params['path_file_key_public'])
-        """
-        # SSH configファイルから設定値を読み取る
-        if re.compile('.+\.pub$', re.IGNORECASE).match(sshconf.Hosts[args.ssh_host]['IdentityFile']):
-            ssh_key_gen_params.update({'path_file_key_public': sshconf.Hosts[args.ssh_host]['IdentityFile']})
-            ssh_key_gen_params.update({'path_file_key_private': sshconf.Hosts[args.ssh_host]['IdentityFile'][:-4]})
-        else:
-            ssh_key_gen_params.update({'path_file_key_private': sshconf.Hosts[args.ssh_host]['IdentityFile']})
-            ssh_key_gen_params.update({'path_file_key_public': sshconf.Hosts[args.ssh_host]['IdentityFile'] + '.pub'})
-        print(ssh_key_gen_params['path_file_key_private'])
-        print(ssh_key_gen_params['path_file_key_public'])
-        """
         # キーファイルから内容を読み取る
         with open(ssh_key_gen_params['path_file_key_private']) as f:
             ssh_key_gen_params['private_key'] = f.read()
@@ -208,40 +198,10 @@ class Inserter:
             'public_key': public_key,
         }
         return ssh_key_gen_params
-
-    """
-    def __SshConfig(self, username, IdentityFile, Port=22):
-        host = 'github.com.{username}'.format(username=username)
-        append = '''\
-Host {Host}
-  User git
-  Port {Port}
-  HostName github.com
-  IdentityFile {IdentityFile}
-  TCPKeepAlive yes
-  IdentitiesOnly yes
-'''
-        append = append.format(Host=host, Port=Port, IdentityFile=IdentityFile)
-        print(append)
-        path_dir_ssh = os.path.join(os.path.expanduser('~'), '.ssh/')
-#        path_dir_ssh = "/tmp/.ssh/" # テスト用
-        path_file_config = os.path.join(path_dir_ssh, 'config')
-        if not(os.path.isfile(path_file_config)):
-            with open(path_file_config, 'w') as f:
-                pass        
-        # configファイルの末尾に追記する
-        with open(path_file_config, 'a') as f:
-            f.write(append)
-        
-        return host
-    """
     
     def __SshConnectCheck(self, host, config_user, path_file_key_private):
         command = "ssh -T git@{host}".format(host=host)
         print(command)
-        # check_output()だと例外発生する
-        # subprocess.CalledProcessError: Command 'ssh -T git@github.com.{user}' returned non-zero exit status 1
-#        subprocess.check_output(command, shell=True, universal_newlines=True)
         subprocess.call(command, shell=True, universal_newlines=True)
         # Hi {user}! You've successfully authenticated, but GitHub does not provide shell access.
 

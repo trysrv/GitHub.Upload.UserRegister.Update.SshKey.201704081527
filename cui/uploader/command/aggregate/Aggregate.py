@@ -3,8 +3,6 @@
 from datetime import datetime
 class Aggregate:
     def __init__(self, db, user, repo):
-#    def __init__(self, data):
-#        self.__db. = data
         self.__db = db
         self.__user = user
         self.__repo = repo

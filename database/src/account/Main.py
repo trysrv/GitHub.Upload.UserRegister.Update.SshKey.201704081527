@@ -9,8 +9,8 @@ import dataset
 import database.src.TsvLoader
 class Main:
     def __init__(self, db_path):
-        self.db_path = db_path
-        self.path_this_dir = os.path.abspath(os.path.dirname(__file__))
+        self.__db_path = db_path
+        self.__path_this_dir = os.path.abspath(os.path.dirname(__file__))
 
     def Run(self):
         self.__Create()
@@ -21,16 +21,16 @@ class Main:
         self.__Create()
 
     def __Create(self):
-        subprocess.call(shlex.split("bash \"{0}\" \"{1}\"".format(os.path.join(self.path_this_dir, "CreateTable.sh"), self.db_path)))
+        subprocess.call(shlex.split("bash \"{0}\" \"{1}\"".format(os.path.join(self.__path_this_dir, "CreateTable.sh"), self.__db_path)))
 
     def __Insert(self):
         tables = ['Accounts', 'TwoFactors', 'AccessTokens']
         for table in tables:
-#            path_tsv = os.path.join(self.path_this_dir, "res/tsv/{0}.tsv".format(table))
-            path_tsv = os.path.join(self.path_this_dir, "res/tsv/meta_{0}.tsv".format(table))
+#            path_tsv = os.path.join(self.__path_this_dir, "res/tsv/{0}.tsv".format(table))
+            path_tsv = os.path.join(self.__path_this_dir, "res/tsv/meta_{0}.tsv".format(table))
             loader = database.src.TsvLoader.TsvLoader()
-            loader.ToSqlite3(path_tsv, self.db_path, table)
+            loader.ToSqlite3(path_tsv, self.__db_path, table)
 
     def __Check(self):
-        subprocess.call(shlex.split("bash \"{0}\" \"{1}\"".format(os.path.join(self.path_this_dir, "Check.sh"), self.db_path)))
+        subprocess.call(shlex.split("bash \"{0}\" \"{1}\"".format(os.path.join(self.__path_this_dir, "Check.sh"), self.__db_path)))
 

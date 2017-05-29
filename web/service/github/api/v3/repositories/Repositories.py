@@ -6,24 +6,19 @@ import json
 import web.service.github.api.v3.Response
 class Repositories:
     def __init__(self, reqp, response, user, repo):
-#    def __init__(self, repo, user, reqp, response):
-#    def __init__(self, db, user, reqp, response):
-#    def __init__(self, data, reqp, response):
-#        self.data = data
-#        self.db = db
-        self.repo = repo
-        self.user = user
-        self.reqp = reqp
-        self.response = response
+        self.__repo = repo
+        self.__user = user
+        self.__reqp = reqp
+        self.__response = response
 
     def create(self, name, description=None, homepage=None):
         method = 'POST'
         endpoint = 'user/repos'
-        params = self.reqp.get(method, endpoint)
+        params = self.__reqp.get(method, endpoint)
         params['data'] = json.dumps({"name": name, "description": description, "homepage": homepage})
         print(params)
         r = requests.post(urllib.parse.urljoin("https://api.github.com", endpoint), headers=params['headers'], data=params['data'])
-        return self.response.Get(r)
+        return self.__response.Get(r)
         
     def gets(self, visibility=None, affiliation=None, type=None, sort='full_name', direction=None, per_page=30):
         if (visibility is None) and (affiliation is None) and (type is None):
@@ -44,7 +39,7 @@ class Repositories:
 
         method = 'GET'
         endpoint = 'user/repos'
-        params = self.reqp.get(method, endpoint)
+        params = self.__reqp.get(method, endpoint)
         params['headers']['Accept'] = 'application/vnd.github.drax-preview+json'
         params['params'] = {}
         if not(None is visibility):
@@ -65,11 +60,11 @@ class Repositories:
         url = urllib.parse.urljoin("https://api.github.com", endpoint)
         while (None is not url):
             print(url)
-            params = self.reqp.update_otp(params)
+            params = self.__reqp.update_otp(params)
             print(params)
             r = requests.get(url, headers=params['headers'], params=json.dumps(params['params']))
-            repos += self.response.Get(r)
-            url = self.response.Headers.Link.Next(r)
+            repos += self.__response.Get(r)
+            url = self.__response.Headers.Link.Next(r)
         return repos
 
     def __raise_param_error(self, target, check_list, target_name):
@@ -83,11 +78,11 @@ class Repositories:
     def list_public_repos(self, since, per_page=30):
         method = 'GET'
         endpoint = 'repositories'
-        params = self.reqp.get(method, endpoint)
+        params = self.__reqp.get(method, endpoint)
         params['params'] = json.dumps({"since": since, "per_page": per_page})
         print(params)
         r = requests.get(urllib.parse.urljoin("https://api.github.com", endpoint), headers=params['headers'])
-        return self.response.Get(r)
+        return self.__response.Get(r)
 
     """
     リポジトリを削除する。
@@ -95,17 +90,15 @@ class Repositories:
     """
     def delete(self, username=None, repo_name=None):
         if None is username:
-#            username = self.data.get_username()
-            username = self.user.Name
+            username = self.__user.Name
         if None is repo_name:
-            repo_name = self.repo.Name
-#            repo_name = self.data.get_repo_name()
+            repo_name = self.__repo.Name
         endpoint = 'repos/:owner/:repo'
-        params = self.reqp.get('DELETE', endpoint)
+        params = self.__reqp.get('DELETE', endpoint)
         endpoint = endpoint.replace(':owner', username)
         endpoint = endpoint.replace(':repo', repo_name)
         r = requests.delete(urllib.parse.urljoin("https://api.github.com", endpoint), headers=params['headers'])
-        return self.response.Get(r)
+        return self.__response.Get(r)
 
     """
     リポジトリを編集する。
@@ -114,26 +107,20 @@ class Repositories:
     """
     def edit(self, name=None, description=None, homepage=None):
         if None is name:
-#            name = self.data.get_repo_name()
-            name = self.user.Name
+            name = self.__user.Name
         if None is description:
-#            description = self.data.get_repo_description()
-            description = self.repo.Description
+            description = self.__repo.Description
         if None is homepage:
-#            homepage = self.data.get_repo_homepage()
-            homepage = self.repo.Homepage
+            homepage = self.__repo.Homepage
 
         endpoint = 'repos/:owner/:repo'
         
         
-        #params = self.reqp.get('PATCH', endpoint)
         params = {}
-        params['headers'] = self.reqp.get_default(scopes=['repo'])
+        params['headers'] = self.__reqp.get_default(scopes=['repo'])
         
-#        endpoint = endpoint.replace(':owner', self.data.get_username())
-#        endpoint = endpoint.replace(':repo', self.data.get_repo_name())
-        endpoint = endpoint.replace(':owner', self.user.Name)
-        endpoint = endpoint.replace(':repo', self.repo.Name)
+        endpoint = endpoint.replace(':owner', self.__user.Name)
+        endpoint = endpoint.replace(':repo', self.__repo.Name)
         params['data'] = {}
         params['data']['name'] = name
         if not(None is description or '' == description):
@@ -145,7 +132,7 @@ class Repositories:
         print(params['headers'])
         print(json.dumps(params['data']))
         r = requests.patch(url, headers=params['headers'], data=json.dumps(params['data']))
-        return self.response.Get(r)
+        return self.__response.Get(r)
         
     """
     リポジトリのプログラミング言語とそのファイルサイズを取得する。
@@ -155,17 +142,15 @@ class Repositories:
     """
     def list_languages(self, username=None, repo_name=None):
         if None is username:
-#            username = self.data.get_username()
-            username = self.user.Name
+            username = self.__user.Name
         if None is repo_name:
-#            repo_name = self.data.get_repo_name()
-            repo_name = self.repo.Name
+            repo_name = self.__repo.Name
 
         endpoint = 'repos/:owner/:repo/languages'
-        params = self.reqp.get('GET', endpoint)
+        params = self.__reqp.get('GET', endpoint)
         endpoint = endpoint.replace(':owner', username)
         endpoint = endpoint.replace(':repo', repo_name)
         r = requests.get(urllib.parse.urljoin("https://api.github.com", endpoint), headers=params['headers'])
         print(endpoint)
-        return self.response.Get(r)
+        return self.__response.Get(r)
 

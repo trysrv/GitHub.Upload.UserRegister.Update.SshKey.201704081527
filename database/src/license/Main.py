@@ -4,30 +4,13 @@ import os.path
 import shlex
 import subprocess
 import database.src.license.insert.Main
-#import database.src.license.insert.command.miscellaneous.Licenses
 import database.src.TsvLoader
 class Main:
     def __init__(self, db, client):
-#    def __init__(self, data, client):
-#        self.data = data
-#        self.client = client
-#        self.licenses = database.src.license.insert.command.miscellaneous.Licenses.Licenses(self.data, self.client)
-#        self.db_path = db_path
         self.__db = db
         self.__client = client
         self.__path_dir_this = os.path.abspath(os.path.dirname(__file__))
 
-    """
-    def Initialize(self):
-        path_sh = os.path.join(self.__path_dir_this, 'create/Create.sh')
-        print(path_sh)
-        print(self.__db.Paths['license'])
-        subprocess.call(shlex.split("bash \"{0}\" \"{1}\"".format(path_sh, self.__db.Paths['license'])))
-        
-        name_table = 'Gnu'
-        tsv = database.src.TsvLoader.TsvLoader()
-        tsv.ToSqlite3(os.path.join(self.__path_dir_this, 'create/{0}.Insert.tsv'.format(name_table)), self.__db.Paths['license'], name_table)
-    """ 
     def Create(self):
         path_sh = os.path.join(self.__path_dir_this, 'create/Create.sh')
         print(path_sh)
@@ -38,8 +21,6 @@ class Main:
         tsv = database.src.TsvLoader.TsvLoader()
         tsv.ToSqlite3(os.path.join(self.__path_dir_this, 'create/{0}.Insert.tsv'.format(name_table)), self.__db.Paths['license'], name_table)
     def Insert(self):
-#        subprocess.call(shlex.split("bash \"{0}\" \"{1}\"".format(path_sh, db_path)))
-#        self.__InsertForFile()
         inserter = database.src.license.insert.Main.Main(self.__db, self.__client)
         inserter.Initialize()
         

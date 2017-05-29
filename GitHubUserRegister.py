@@ -6,14 +6,14 @@ import os.path
 import subprocess
 import configparser
 import argparse
-import web.service.github.api.v3.Client
-import cui.uploader.Main
-import cui.register.Main
+import cui.register.command.Inserter
+import cui.register.command.Deleter
+import cui.register.command.Updater
 
 class Main:
     def __init__(self):
-        self.config = configparser.ConfigParser()
-        self.config.read(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config.ini'))
+        self.__config = configparser.ConfigParser()
+        self.__config.read(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config.ini'))
 
     def Run(self):
         parser = argparse.ArgumentParser(
@@ -58,16 +58,19 @@ class Main:
             parser.print_help()
 
     def __insert(self, args):
-        main = cui.register.Main.Main(os.path.abspath(self.config['Path']['DB']))
-        main.Insert(args)
+        inserter = cui.register.command.Inserter.Inserter()
+#        return inserter.Insert(args)
+        return inserter.Run(args)
 
     def __delete(self, args):
-        main = cui.register.Main.Main(os.path.abspath(self.config['Path']['DB']))
-        main.Delete(args)
+        deleter = cui.register.command.Deleter.Deleter()
+#        deleter.Delete(args)
+        deleter.Run(args)
 
     def __update(self, args):
-        main = cui.register.Main.Main(os.path.abspath(self.config['Path']['DB']))
-        main.Update(args)
+        updater = cui.register.command.Updater.Updater()
+#        return updater.Update(args)
+        return updater.Run(args)
 
 
 if __name__ == '__main__':

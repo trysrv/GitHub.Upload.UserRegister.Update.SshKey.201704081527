@@ -8,7 +8,7 @@ import requests
 
 class GnuSite(object):
     def __init__(self, path_gnu_licenses_sqlite3):
-        self.db_license = dataset.connect('sqlite:///' + path_gnu_licenses_sqlite3)
+        self.__db_license = dataset.connect('sqlite:///' + path_gnu_licenses_sqlite3)
 
     def GetAll(self):
         for lang in self.__GetAllLanguages():
@@ -103,10 +103,10 @@ class GnuSite(object):
                     name = a.string.strip().replace('\n', '')
                     try:
                         if 'en' == self.processing_language_code:
-                            self.db_license['Licenses'].insert(self.__CreateLicense(dl, dt, targetValue))
-                        license = self.db_license['Licenses'].find_one(HeaderId=self.__GetHeaderId(dt))
-                        if None is self.db_license['Multilingual'].find_one(LicenseId=license['Id'], LanguageCode=self.processing_language_code):
-                            self.db_license['Multilingual'].insert(self.__CreateMultilingual(dt, name, self.db_license['Licenses'].find_one(HeaderId=self.__GetHeaderId(dt))['Id']))
+                            self.__db_license['Licenses'].insert(self.__CreateLicense(dl, dt, targetValue))
+                        license = self.__db_license['Licenses'].find_one(HeaderId=self.__GetHeaderId(dt))
+                        if None is self.__db_license['Multilingual'].find_one(LicenseId=license['Id'], LanguageCode=self.processing_language_code):
+                            self.__db_license['Multilingual'].insert(self.__CreateMultilingual(dt, name, self.__db_license['Licenses'].find_one(HeaderId=self.__GetHeaderId(dt))['Id']))
                     except Exception as e:
                         print('%r' % e)
         return dl
@@ -115,7 +115,7 @@ class GnuSite(object):
         print(self.__GetHeaderId(dt))
         record = dict(
             HeaderId=self.__GetHeaderId(dt),
-            ColorId=self.db_license['Colors'].find_one(Key=dl.get('class'))['Id'],
+            ColorId=self.__db_license['Colors'].find_one(Key=dl.get('class'))['Id'],
             Target=targetValue,
             Url=dt.find('a').get('href')
         )

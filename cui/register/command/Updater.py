@@ -16,12 +16,14 @@ import cui.register.github.api.v3.users.Emails
 import cui.register.github.api.v3.users.Users
 import web.sqlite.Json2Sqlite
 import cui.register.SshConfigurator
-class Updater:
+import cui.register.command.ASubCommand
+class Updater(cui.register.command.ASubCommand):
     def __init__(self):
         self.__j2s = web.sqlite.Json2Sqlite.Json2Sqlite()
         self.__db = None
 
-    def Update(self, args):
+    def Run(self, args):
+#    def Update(self, args):
         print('Account.Update')
         print(args)
         print('-u: {0}'.format(args.username))
@@ -165,8 +167,6 @@ class Updater:
         sshkeys['ReadOnly'] = self.__j2s.BoolToInt(j_ssh['read_only'])
         sshkeys['CreatedAt'] = j_ssh['created_at']
         self.__db.account['SshKeys'].update(sshkeys, ['Id'])
-#        self.__db.account['SshConfigures'].insert(self.__CreateRecordSshConfigures(account['Id'], args.ssh_host, ssh_key_gen_params))
-#        self.__db.account['SshKeys'].insert(self.__CreateRecordSshKeys(account['Id'], ssh_key_gen_params['private_key'], ssh_key_gen_params['public_key'], j_ssh))
 
     def __LoadSshKeyFile(self, args, sshconf):
         ssh_key_gen_params = {

@@ -46,14 +46,7 @@ class SshKeys(object):
         print(url)
         r = requests.delete(url, headers=headers, auth=(username, password))
         return self.__response.Get(r)
-    """
-    def Delete(self, token, key_id):
-        url = 'https://api.github.com/user/keys/{key_id}'.format(key_id=key_id)
-        headers=self.__GetHeaders(token)
-        print(url)
-        r = requests.delete(url, headers=headers)
-        return self.__response.Get(r)
-    """
+
     def __GetHeaders(self, token=None, otp=None):
         headers = {
             'Time-Zone': 'Asia/Tokyo',

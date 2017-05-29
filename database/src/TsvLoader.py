@@ -8,7 +8,7 @@ import getpass
 import dataset
 class TsvLoader:
     def __init__(self):
-        self.delimiter = '\t'
+        self.__delimiter = '\t'
 
     def ToSqlite3(self, path_tsv, path_db, name_table):
         self.path_tsv = path_tsv
@@ -30,7 +30,7 @@ class TsvLoader:
     def __Insert(self):
         with open(self.path_tsv, mode='r', encoding='utf-8') as f:
             line = f.readline().rstrip('\r\n') # 末尾の`\r`と`\n`をすべて削除する
-            columns = line.split(self.delimiter)
+            columns = line.split(self.__delimiter)
             while line:
                 line = f.readline().rstrip('\r\n') # 末尾の`\r`と`\n`をすべて削除する
                 print(line)
@@ -39,7 +39,7 @@ class TsvLoader:
                     self.table.insert(record)
     
     def __CreateRecord(self, columns, line):
-        datas = line.split(self.delimiter) # 最後の改行をとる
+        datas = line.split(self.__delimiter) # 最後の改行をとる
         if len(columns) != len(datas):
             print('以下の行は列ヘッダと数が合わないため処理しません。')
             print(line)

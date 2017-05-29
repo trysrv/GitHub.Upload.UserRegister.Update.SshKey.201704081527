@@ -7,9 +7,6 @@ import json
 import datetime
 class Inserter:
     def __init__(self, db, client, user, repo):
-#    def __init__(self, db, client):
-#    def __init__(self, data, client):
-#        self.data = data
         self.__db = db
         self.__client = client
         self.__user = user
@@ -43,7 +40,6 @@ class Inserter:
                 else:
                     # 対象リポジトリのライセンスがマスターテーブルに存在しないなら、APIで取得してDBへ挿入する
                     if None is self.__db.license['Licenses'].find_one(Key=j['license']['key']):
-#                        self.__db.license['Licenses'].insert(self.__CreateRecordLicense(self.license.License(j['license']['key'])))
                         self.__db.license['Licenses'].insert(self.__CreateRecordLicense(self.__client.license.GetLicense(j['license']['key'])))
                 print(j['license']['key'])
                 print(self.__db.license['Licenses'].count())
@@ -70,7 +66,6 @@ class Inserter:
     def __CreateRecordRepository(self, j):
         return dict(
             IdOnGitHub=j['id'],
-#            Owner=j['owner']['login'],
             Name=j['name'],
             Description=j['description'],
             Homepage=j['homepage'],
@@ -95,8 +90,6 @@ class Inserter:
     def __InsertLanguages(self, repo_id, username, repo_name):
         # 対象リポジトリの言語レコードがDBに存在しないとき、APIで取得しDBへ挿入する
         if (self.__user.RepoDb['Languages'].count(RepositoryId=repo_id) == 0):
-#            j = self.license.Languages(username, repo_name)
-#            j = self.__client.repo.list_languages(repo_name, username=username)
             j = self.__client.repo.list_languages(username=username, repo_name=repo_name)
             for key in j.keys():
                 self.__user.RepoDb['Languages'].insert(dict(

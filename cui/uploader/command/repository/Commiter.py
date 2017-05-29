@@ -8,9 +8,6 @@ import json
 
 class Commiter:
     def __init__(self, db, client, user, repo):
-#    def __init__(self, db, client):
-#    def __init__(self, data, client):
-#        self.data = data
         self.__db = db
         self.__client = client
         self.__user = user

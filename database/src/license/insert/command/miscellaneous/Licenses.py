@@ -8,8 +8,6 @@ import datetime
 import web.service.github.api.v3.Response
 class Licenses:
     def __init__(self, db, client):
-#    def __init__(self, data, client):
-#        self.data = data
         self.__db = db
         self.__response = web.service.github.api.v3.Response.Response()
         self.__client = client
@@ -72,14 +70,7 @@ class Licenses:
             Limitations=self.__ArrayToString(j['limitations']),
             Body=j['body']
         )
-    """
-    def __GetHttpHeaders(self):
-        return {
-            "Accept": "application/vnd.github.drax-preview+json",
-            "Time-Zone": "Asia/Tokyo",
-            "Authorization": "token {0}".format(self.data.get_access_token())
-        }
-    """
+
     def __BoolToInt(self, bool_value):
         if True == bool_value:
             return 1

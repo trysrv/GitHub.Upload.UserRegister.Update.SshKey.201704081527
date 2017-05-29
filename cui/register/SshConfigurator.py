@@ -94,18 +94,12 @@ Host {Host}
 '''
 
     """
-    def DeleteHost(self, host):
-        if hostname in self.Hosts:
-            re.sub(self.CreateHost(), repl, string, flags=(re.MULTILINE | re.DOTALL))
-    """
-    """
     指定したHostの設定一式を削除する。
     """
     def DeleteHost(self, host):
         with open(self.__path_file_config, 'w') as f:
             self.__text = self.__GetConfigTextAfterDeletedHost(host)
             f.write(self.__text)
-#            self.__Parse()
             del self.__hosts[host]
 
     """
@@ -124,11 +118,6 @@ Host {Host}
                 if nowHost != targetHost:
                     nowHost = None
                     afterText += line + '\n'
-                """
-                if nowHost != targetHost:
-                    nowHost = None
-                    continue
-                """
             elif None is not nowHost and nowHost == targetHost:
                 # 行頭がインデントされているならnowHost内の定義行と解釈する
                 if self.__re_indent.match(line):

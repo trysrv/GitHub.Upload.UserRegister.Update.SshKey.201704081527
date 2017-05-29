@@ -5,9 +5,9 @@ import getpass
 import database.src.other_repo.insert.command.repositories.Inserter
 class Main:
     def __init__(self, data, client):
-        self.data = data
-        self.client = client
-        self.inserter = database.src.other_repo.insert.command.repositories.Inserter.Inserter(self.data, self.client)
+        self.__data = data
+        self.__client = client
+        self.__inserter = database.src.other_repo.insert.command.repositories.Inserter.Inserter(self.__data, self.__client)
         
     def Initialize(self):
         path_this_dir = os.path.abspath(os.path.dirname(__file__))
@@ -19,11 +19,11 @@ class Main:
                 print(url)
                 if len(url) == 0:
                     continue
-                username = self.data.get_other_username(url)
-                repo_name = self.data.get_other_repo_name(url)
+                username = self.__data.get_other_username(url)
+                repo_name = self.__data.get_other_repo_name(url)
                 print("ユーザ名: " + username)
                 print("リポジトリ名: " + repo_name)
-                self.inserter.Insert(username, repo_name)
+                self.__inserter.Insert(username, repo_name)
         
     def Run(self):
         print('GitHubリポジトリ情報を取得します。')
@@ -35,12 +35,12 @@ class Main:
             if '' == url:
                 break
             elif 'l' == url or 'L' == url:
-                self.inserter.Show()
+                self.__inserter.Show()
             else:
-                username = self.data.get_other_username(url)
-                repo_name = self.data.get_other_repo_name(url)
+                username = self.__data.get_other_username(url)
+                repo_name = self.__data.get_other_repo_name(url)
                 print("ユーザ名: " + username)
                 print("リポジトリ名: " + repo_name)
                 # 未登録ならDBへ挿入する（GitHubAPIでリポジトリ情報、言語情報、ライセンス情報を取得して）
-                self.inserter.Insert(username, repo_name)
+                self.__inserter.Insert(username, repo_name)
 

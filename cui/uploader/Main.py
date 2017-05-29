@@ -11,17 +11,15 @@ import cui.uploader.command.aggregate.Aggregate
 
 class Main:
     def __init__(self, db, client, user, repo):
-#    def __init__(self, data, client):
-#        self.__db = data
         self.__db = db
         self.__client = client
         self.__user = user
         self.__repo = repo
-        self.creator = cui.uploader.command.repository.Creator.Creator(self.__db, self.__client, self.__user, self.__repo)
-        self.commiter = cui.uploader.command.repository.Commiter.Commiter(self.__db, self.__client, self.__user, self.__repo)
-        self.deleter = cui.uploader.command.repository.Deleter.Deleter(self.__db, self.__client, self.__user, self.__repo)
-        self.editor = cui.uploader.command.repository.Editor.Editor(self.__db, self.__client, self.__user, self.__repo)
-        self.agg = cui.uploader.command.aggregate.Aggregate.Aggregate(self.__db, self.__user, self.__repo)
+        self.__creator = cui.uploader.command.repository.Creator.Creator(self.__db, self.__client, self.__user, self.__repo)
+        self.__commiter = cui.uploader.command.repository.Commiter.Commiter(self.__db, self.__client, self.__user, self.__repo)
+        self.__deleter = cui.uploader.command.repository.Deleter.Deleter(self.__db, self.__client, self.__user, self.__repo)
+        self.__editor = cui.uploader.command.repository.Editor.Editor(self.__db, self.__client, self.__user, self.__repo)
+        self.__agg = cui.uploader.command.aggregate.Aggregate.Aggregate(self.__db, self.__user, self.__repo)
 
     def Run(self):
         if -1 != self.__Create():
@@ -44,7 +42,7 @@ class Main:
             self.__CreateInfo()
             answer = input()
             if 'y' == answer or 'Y' == answer:
-                self.creator.Create()
+                self.__creator.Create()
                 return 0
             elif 'n' == answer or 'N' == answer:
                 print('call.shを編集して再度やり直してください。')
@@ -57,7 +55,7 @@ class Main:
         print('説明: {0}'.format(self.__repo.Description))
         print('URL: {0}'.format(self.__repo.Homepage))
         print('----------------------------------------')
-        self.commiter.ShowCommitFiles()
+        self.__commiter.ShowCommitFiles()
         print('commit,pushするならメッセージを入力してください。Enterかnで終了します。')
         print('サブコマンド    n:終了 a:集計 e:編集 d:削除 i:Issue作成')
 
@@ -69,7 +67,7 @@ class Main:
                 print('終了します。')
                 break
             elif 'a' == answer or 'A' == answer:
-                self.agg.Show()
+                self.__agg.Show()
             elif 'e' == answer or 'E' == answer:
                 self.__ConfirmEdit()
             elif 'd' == answer or 'D' == answer:
@@ -78,17 +76,17 @@ class Main:
             elif 'i' == answer or 'I' == answer:
                 print('(Issue作成する。(未実装))')
             else:
-                self.commiter.AddCommitPush(answer)
-                self.agg.Show()
+                self.__commiter.AddCommitPush(answer)
+                self.__agg.Show()
 
     def __ConfirmDelete(self):
         print('.gitディレクトリ、対象リモートリポジトリ、対象DBレコードを削除します。')
         print('リポジトリ名： {0}/{1}'.format(self.__user.Name, self.__repo.Name))
-        self.deleter.ShowDeleteRecords()
+        self.__deleter.ShowDeleteRecords()
         print('削除すると復元できません。本当に削除してよろしいですか？[y/n]')
         answer = input()
         if 'y' == answer or 'Y' == answer:
-            self.deleter.Delete()
+            self.__deleter.Delete()
             print('削除しました。')
             return True
         else:
@@ -111,5 +109,5 @@ class Main:
         if '' == description and '' == homepage and self.__repo.Name == name:
             print('編集する項目がないため中止します。')
         else:
-            self.editor.Edit(name, description, homepage)
+            self.__editor.Edit(name, description, homepage)
             print('編集しました。')

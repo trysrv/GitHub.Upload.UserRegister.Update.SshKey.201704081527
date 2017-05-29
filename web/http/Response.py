@@ -105,8 +105,6 @@ class Response(object):
                         for key in self.parameters.keys():
                             if 'charset' == key.lower():
                                 self.char_set = self.parameters[key]
-#                        if self.__re_charset.match(self.parameters):
-#                            self.char_set = re.sub(self.__re_charset, '', self.parameters).strip()
                 print('mime_type: {0}'.format(self.mime_type))
                 print('top_level_type: {0}'.format(self.top_level_type))
                 print('sub_type: {0}'.format(self.sub_type))

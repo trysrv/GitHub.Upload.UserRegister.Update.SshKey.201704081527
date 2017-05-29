@@ -10,9 +10,6 @@ import json
 
 class Creator:
     def __init__(self, db, client, user, repo):
-#    def __init__(self, db, client):
-#    def __init__(self, data, client):
-#        self.__db = data
         self.__db = db
         self.__client = client
         self.__user = user
